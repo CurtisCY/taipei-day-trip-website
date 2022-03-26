@@ -3,6 +3,11 @@ from flask import request
 import json
 import sys
 import mysql.connector
+import os
+
+databaseName = os.environ['DATABASE_NAME']
+databaseUser = os.environ['DATABASE_USER']
+databaseCredential = os.environ['DATABASE_CREDENTIAL']
 
 
 app=Flask(__name__)
@@ -10,7 +15,8 @@ app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
 
-cnx = mysql.connector.connect(host='localhost', database='website', user='root', password='#Curtis0630') 
+
+cnx = mysql.connector.connect(host='localhost', database='{}'.format(databaseName), user='{}'.format(databaseUser), password='{}'.format(databaseCredential)) 
 cursor = cnx.cursor()
 
 # cursor.execute("SELECT spotId, spotName FROM attractionSpotList")
