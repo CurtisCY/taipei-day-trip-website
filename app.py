@@ -4,6 +4,7 @@ import json
 import sys
 import mysql.connector
 import os
+import re
 
 databaseName = os.environ['DATABASE_NAME']
 databaseUser = os.environ['DATABASE_USER']
@@ -97,9 +98,6 @@ def apiAttractions():
 		}
 		for data in myresult:
 			
-			spotId = data[0]
-			spotName = data[1]
-
 			# print(data)
 			# print(data[0])
 			# print(data[1])     
@@ -108,17 +106,27 @@ def apiAttractions():
 
 		#print(page)
 
+			spotId = int(data[0])
+			spotLatitude = float(data[7])
+			spotLongitude = float(data[8])
+	
+			spotImageStr = data[9]
+			spotImageModifiedStr = re.sub('\ |\[|\]|\'|','',spotImageStr)
+			spotImageList = list(spotImageModifiedStr.split(','))
+			spotImageDict = { i : spotImageList[i] for i in range(0, len(spotImageList) ) }
+			# print(spotImageDict)
+
 			spotInfo = {
-					"id": f"{data[0]}",
+					"id": spotId,
 					"name": f"{data[1]}",
 					"category": f"{data[2]}",
 					"description": f"{data[3]}",
 					"address": f"{data[4]}",
 					"transport": f"{data[5]}",
 					"mrt": f"{data[6]}",
-					"latitude": f"{data[7]}",
-					"longitude": f"{data[8]}",
-					"images": f"{data[9]}"
+					"latitude": spotLatitude,
+					"longitude": spotLongitude,
+					"images": spotImageDict
 			}
 
 			responseData['data'].append(spotInfo)
@@ -156,18 +164,30 @@ def apiAttraction(id):
 		
 		if (len(myresult)!=0):
 			for data in myresult:
+
+				spotId = int(data[0])
+				spotLatitude = float(data[7])
+				spotLongitude = float(data[8])
+	
+				spotImageStr = data[9]
+				spotImageModifiedStr = re.sub('\ |\[|\]|\'|','',spotImageStr)
+				spotImageList = list(spotImageModifiedStr.split(','))
+				spotImageDict = { i : spotImageList[i] for i in range(0, len(spotImageList) ) }
+				print(spotImageDict)
+				print(type(spotImageDict))
 				
 				spotInfo = {
-						"id": f"{data[0]}",
+						# "id": (f"{data[0]}"),
+						"id": spotId,
 						"name": f"{data[1]}",
 						"category": f"{data[2]}",
 						"description": f"{data[3]}",
 						"address": f"{data[4]}",
 						"transport": f"{data[5]}",
 						"mrt": f"{data[6]}",
-						"latitude": f"{data[7]}",
-						"longitude": f"{data[8]}",
-						"images": f"{data[9]}"
+						"latitude": spotLatitude,
+						"longitude": spotLongitude,
+						"images": spotImageDict
 				}
 
 				responseData['data'].append(spotInfo)
