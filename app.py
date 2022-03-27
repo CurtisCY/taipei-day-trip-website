@@ -97,14 +97,6 @@ def apiAttractions():
 			"data":[]
 		}
 		for data in myresult:
-			
-			# print(data)
-			# print(data[0])
-			# print(data[1])     
-			# print(type(data[1]))
-
-
-		#print(page)
 
 			spotId = int(data[0])
 			spotLatitude = float(data[7])
@@ -126,19 +118,14 @@ def apiAttractions():
 					"mrt": f"{data[6]}",
 					"latitude": spotLatitude,
 					"longitude": spotLongitude,
-					"images": [spotImageDict]
+					"images": spotImageList
 			}
 
 			responseData['data'].append(spotInfo)
 			# print(responseData)
 			print('\n\n\n')
-		print(responseData)
 
-			
-			# print(type(f"{spotName}"))
-		
-		# responseData = {}
-		# responseJsonData = json.dumps(responseData)
+		print(responseData)
 		responseJsonData = jsonify(responseData)
 		
 		return responseJsonData
@@ -152,11 +139,7 @@ def apiAttractions():
 @app.route("/api/attraction/<id>")
 def apiAttraction(id):
 	print(id)
-	
-	responseData={
-		"data":[]
-	}
-	
+		
 	try:
 		cursor.execute("SELECT spotId, spotName, spotCategory, spotDescription, spotAddress, spotTransport, spotMRT, spotLatitude, spotLongitude, spotImages FROM attractionSpotList WHERE spotId=%s",(id, ))
 		myresult = cursor.fetchall()
@@ -175,9 +158,8 @@ def apiAttraction(id):
 				spotImageDict = { i : spotImageList[i] for i in range(0, len(spotImageList) ) }
 				print(spotImageDict)
 				print(type(spotImageDict))
-				
+			
 				spotInfo = {
-						# "id": (f"{data[0]}"),
 						"id": spotId,
 						"name": f"{data[1]}",
 						"category": f"{data[2]}",
@@ -187,13 +169,16 @@ def apiAttraction(id):
 						"mrt": f"{data[6]}",
 						"latitude": spotLatitude,
 						"longitude": spotLongitude,
-						"images": [spotImageDict]
+						"images": spotImageList
 				}
 
-				responseData['data'].append(spotInfo)
-				# print(responseData)
+				responseData={
+					"data": spotInfo
+				}
+
 				print('\n\n\n')
 			print(responseData)
+			
 			responseJsonData = jsonify(responseData)
 			return responseJsonData
 		else:
