@@ -126,7 +126,7 @@ def apiAttractions():
 					"mrt": f"{data[6]}",
 					"latitude": spotLatitude,
 					"longitude": spotLongitude,
-					"images": spotImageDict
+					"images": [spotImageDict]
 			}
 
 			responseData['data'].append(spotInfo)
@@ -187,7 +187,7 @@ def apiAttraction(id):
 						"mrt": f"{data[6]}",
 						"latitude": spotLatitude,
 						"longitude": spotLongitude,
-						"images": spotImageDict
+						"images": [spotImageDict]
 				}
 
 				responseData['data'].append(spotInfo)
